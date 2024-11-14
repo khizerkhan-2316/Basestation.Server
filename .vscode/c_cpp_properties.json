@@ -7,7 +7,9 @@
                 "/home/stud/ngk",
                 "/home/stud/ngk/restinio/dev",
                 "/home/stud/ngk/llhttp/build",
-                "/home/stud/ngk/expected-lite/include"
+                "/home/stud/ngk/expected-lite/include",
+                "/home/stud/ngk/json_dto/dev",
+                "/home/stud/ngk/rapidjson/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
