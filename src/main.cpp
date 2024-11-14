@@ -116,14 +116,7 @@ auto server_handler( book_collection_t & book_collection )
 					.done();
 		};
 
-    auto handle_options = [](const restinio::request_handle_t& req, rr::route_params_t) {
-    return req->create_response(restinio::status_no_content())
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        .append_header("Access-Control-Allow-Headers", "Content-Type")
-        .connection_close()
-        .done();
-}
+
 
 	// Handlers for '/' path.
 	router->http_get( "/", by( &books_handler_t::on_books_list ) );
@@ -135,7 +128,6 @@ auto server_handler( book_collection_t & book_collection )
 					restinio::http_method_get() ),
 			"/", method_not_allowed );
 
-    router->add_handler(restinio::http_method_options(), "/api/submarines", handle_options);
 
 	return router;
 }
