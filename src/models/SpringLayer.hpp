@@ -23,6 +23,11 @@ public:
         auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(         now.time_since_epoch()).count();
         return "SL" + std::to_string(now_ms);
     }
+    // Getter for layer ID
+    std::string getId() const {
+        return id;
+    }
+
     // Getter for layer depth
     float getLayerDepth() const {
         return layerDepth;
