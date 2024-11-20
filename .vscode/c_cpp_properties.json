@@ -10,7 +10,8 @@
                 "/home/stud/ngk/expected-lite/include",
                 "/home/stud/ngk/json_dto/dev",
                 "/home/stud/ngk/rapidjson/include",
-                "/usr/include/boost"
+                "/usr/include/boost",
+                "${workspaceFolder}/src/dataaccess"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
