@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <chrono>
+#include <sstream>
+#include <ctime>
 
 enum class AnalysisStatus { Pending, InProgress, Completed };
 
@@ -70,6 +73,69 @@ public:
             std::cout << "Layer Depth: " << layer.getLayerDepth() << " meters, ID: " << layer.getId() << "\n";
         }
     }
-};
 
+    const std::string& getId() const {
+        return id;
+    }
+
+    void setId(const std::string& analysisId) {
+        id = analysisId;
+    }
+
+    const std::string& getSubmarineId() const {
+        return submarineId;
+    }
+
+    void setSubmarineId(const std::string& subId) {
+        submarineId = subId;
+    }
+
+    const std::vector<MeasurementData>& getMeasurements() const {
+        return measurements;
+    }
+
+    const std::vector<SpringLayer>& getSpringLayers() const {
+        return springLayers;
+    }
+
+    void setStartTimeFromString(const std::string& timeStr) {
+        std::istringstream timeStream(timeStr);
+        std::time_t t;
+        timeStream >> t;
+        startTime = std::chrono::system_clock::from_time_t(t);
+    }
+
+    void setEndTimeFromString(const std::string& timeStr) {
+        std::istringstream timeStream(timeStr);
+        std::time_t t;
+        timeStream >> t;
+        endTime = std::chrono::system_clock::from_time_t(t);
+    }
+
+    std::string getStartTimeAsString() const {
+        std::time_t t = std::chrono::system_clock::to_time_t(startTime);
+        std::ostringstream timeStream;
+        timeStream << t;
+        return timeStream.str();
+    }
+
+    std::string getEndTimeAsString() const {
+        std::time_t t = std::chrono::system_clock::to_time_t(endTime);
+        std::ostringstream timeStream;
+        timeStream << t;
+        return timeStream.str();
+    }
+
+    void setStatus(AnalysisStatus newStatus) {
+        status = newStatus;
+        if (newStatus == AnalysisStatus::Completed) {
+            endTime = std::chrono::system_clock::now();
+        }
+    }
+
+    AnalysisStatus getStatus() const {
+        return status;
+    }
+
+};
 #endif

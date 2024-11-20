@@ -27,6 +27,10 @@ public:
     std::string getId() const {
         return id;
     }
+    // Setter for layer ID
+    void setId(const std::string& newId) {
+        id = newId;
+    }
 
     // Getter for layer depth
     float getLayerDepth() const {
@@ -54,5 +58,30 @@ public:
         std::cout << "Layer Depth: " << layerDepth << " meters" << std::endl;
         std::cout << "Timestamp: " << getFormattedTimestamp() << std::endl;
       std::cout << "Layer Valid: " << (isSpringLayerValid ? "Yes" : "No") << std::endl;
-}
+    } 
+
+    // Method to update the layer depth
+    void updateLayerDepth(float newDepth) {
+        layerDepth = newDepth;
+    }
+    // Method to update the timestamp
+    void updateTimestamp() {
+        timestamp = std::chrono::system_clock::now();
+    }
+    // Method to validate the SpringLayer
+    void validateLayer() {
+        isSpringLayerValid = true;
+    }
+    // Method to invalidate the SpringLayer
+    void invalidateLayer() {
+        isSpringLayerValid = false;
+    }
+
+    // Method to serialize the SpringLayer data
+    std::string serialize() const {
+        std::ostringstream oss;
+        oss << id << "," << layerDepth << "," << getFormattedTimestamp() << "," << (isSpringLayerValid ? "1" : "0");
+        return oss.str();
+    }
+
 };
