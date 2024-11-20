@@ -9,7 +9,8 @@
                 "/home/stud/ngk/llhttp/build",
                 "/home/stud/ngk/expected-lite/include",
                 "/home/stud/ngk/json_dto/dev",
-                "/home/stud/ngk/rapidjson/include"
+                "/home/stud/ngk/rapidjson/include",
+                "/usr/include/boost"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",
