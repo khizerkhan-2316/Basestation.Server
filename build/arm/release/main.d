@@ -56,7 +56,16 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../restinio/path2regex/path2regex.hpp \
  ../../restinio/router/std_regex_engine.hpp \
  ../../restinio/router/method_matcher.hpp \
- src/./controllers/SubmarineController.hpp \
+ ../../restinio/websocket/websocket.hpp \
+ ../../restinio/websocket/message.hpp \
+ ../../restinio/utils/impl/bitops.hpp \
+ ../../restinio/websocket/impl/ws_connection_base.hpp \
+ ../../restinio/websocket/impl/ws_connection.hpp \
+ ../../restinio/websocket/impl/ws_parser.hpp \
+ ../../restinio/websocket/impl/ws_protocol_validator.hpp \
+ ../../restinio/websocket/impl/utf8.hpp ../../restinio/utils/base64.hpp \
+ ../../restinio/utils/base64_lut.ipp ../../restinio/utils/sha1.hpp \
+ src/./controllers/AnalysisController.hpp \
  ../../../../json_dto/dev/json_dto/pub.hpp \
  ../../../../rapidjson/include/rapidjson/document.h \
  ../../../../rapidjson/include/rapidjson/reader.h \
@@ -95,4 +104,11 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../../../rapidjson/include/rapidjson/writer.h \
  ../../../../rapidjson/include/rapidjson/stringbuffer.h \
  ../../../../rapidjson/include/rapidjson/ostreamwrapper.h \
- ../../../../rapidjson/include/rapidjson/istreamwrapper.h
+ ../../../../rapidjson/include/rapidjson/istreamwrapper.h \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/AnalysisRepo.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Analysis.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/MeasurementData.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/SpringLayer.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/DBUtils.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Submarine.hpp \
+ src/./controllers/SubmarineController.hpp
