@@ -31,8 +31,8 @@ auto server_handler() {
                       by(&AnalysisController::options));
   router->http_get("/get", by(&AnalysisController::testAli));
 
-  //   router->http_post("api/handleStartMeasurements",
-  //                     by(&AnalysisController::handlestartAnalysis));
+  // router->http_post("api/handleStartMeasurements",
+  //                   by(&AnalysisController::handlestartAnalysis));
 
   router->http_get("api/getMeasurementResults/:id",
                    by(&AnalysisController::getAnalysisResults));

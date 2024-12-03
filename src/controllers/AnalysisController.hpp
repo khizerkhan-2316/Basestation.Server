@@ -53,12 +53,7 @@ class AnalysisController {
       const restinio::request_handle_t &req,
       const restinio::router::route_params_t &params) const {
     // Create a response object
-    auto resp = req->create_response();
-
-    // Set CORS and Content-Type headers
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    auto resp = init_resp(req->create_response());
 
     // Get the `id` parameter from the URL
     std::string id = restinio::cast_to<std::string>(params["id"]);
@@ -91,11 +86,7 @@ class AnalysisController {
 
   auto testAli(const restinio::request_handle_t &req,
                const restinio::router::route_params_t &params) {
-    auto resp = req->create_response();
-
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    auto resp = init_resp(req->create_response());
 
     resp.set_body("hej");
     sendMessage("det virker" + std::to_string(1));
@@ -108,12 +99,7 @@ class AnalysisController {
       const restinio::request_handle_t &req,
       const restinio::router::route_params_t &params) const {
     // Create a response object
-    auto resp = req->create_response();
-
-    // Set CORS and Content-Type headers
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    auto resp = init_resp(req->create_response());
 
     // Get the `submarineId` parameter from the URL
     std::string submarineId =
@@ -151,13 +137,7 @@ class AnalysisController {
   auto approveAnalysis(const restinio::request_handle_t &req,
                        const restinio::router::route_params_t &params) const {
     // Create a response object
-    auto resp = req->create_response();
-
-    // Set CORS and Content-Type headers
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "POST, OPTIONS");
-
+    auto resp = init_resp(req->create_response());
     // Get the `id` parameter from the URL
     std::string id = restinio::cast_to<std::string>(params["id"]);
 
@@ -191,12 +171,7 @@ class AnalysisController {
   auto rejectAnalysis(const restinio::request_handle_t &req,
                       const restinio::router::route_params_t &params) const {
     // Create a response object
-    auto resp = req->create_response();
-
-    // Set CORS and Content-Type headers
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "POST, OPTIONS");
+    auto resp = init_resp(req->create_response());
 
     // Get the `id` parameter from the URL
     std::string id = restinio::cast_to<std::string>(params["id"]);
@@ -232,26 +207,9 @@ class AnalysisController {
       const restinio::request_handle_t &req,
       const restinio::router::route_params_t &params) const {
     // Create a response object
-    auto resp = req->create_response();
-
-    // Set CORS and Content-Type headers
-    resp.append_header("Content-Type", "application/json; charset=utf-8")
-        .append_header("Access-Control-Allow-Origin", "*")
-        .append_header("Access-Control-Allow-Methods", "POST, OPTIONS");
+    auto resp = init_resp(req->create_response());
 
     try {
-      //   // Parse the JSON body from the request
-      //   auto body = req->body();
-      //   nlohmann::json json_body = nlohmann::json::parse(body);
-      //   // Extract submarine details
-      //   std::string submarineId =
-      //   json_body.at("submarineId").get<std::string>(); std::string name =
-      //   json_body.at("name").get<std::string>();
-      // //   std::string type = json_body.at("type").get<std::string>();
-      //   // Create a Submarine object (replace this with your actual Submarine
-      //   // model)
-      //   Submarine submarine{submarineId, name, type};
-
       std::string requestBody = req->body();
       Submarine submarine;
       json_dto::from_json(requestBody, submarine);
