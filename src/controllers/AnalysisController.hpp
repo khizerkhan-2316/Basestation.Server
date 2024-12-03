@@ -38,6 +38,25 @@ class AnalysisController {
     return restinio::request_rejected();
   }
 
+  auto postMeasurements(const restinio::request_handle_t &req,
+                        const restinio::router::route_params_t &params) const {
+    auto resp = init_resp(req->create_response());
+
+    std::string requestBody = req->body();
+
+    sendMessage(requestBody);
+
+    // Analysis a;
+
+    // json_dto::from_json(requestBody, a);
+
+    // AnalysisRepository ar("home/stud/text.txt");
+    // ar.saveAnalysis(a);
+    resp.set_body("hej");
+
+    return resp.done();
+  }
+
   auto options(restinio::request_handle_t req,
                restinio::router::route_params_t) {
     const auto methods = "OPTIONS, GET, POST, PATCH, DELETE, PUT";

@@ -34,22 +34,24 @@ auto server_handler() {
   // router->http_post("api/handleStartMeasurements",
   //                   by(&AnalysisController::handlestartAnalysis));
 
-  router->http_get("api/getMeasurementResults/:id",
+  router->http_get("/api/getMeasurementResults/:id",
                    by(&AnalysisController::getAnalysisResults));
 
   //   router->http_get("api/getAllMeasurements",
   //                    by(&AnalysisController::getAllAnalysis));
 
-  router->http_get("api/getSubmarineMeasurements/:id",
+  router->http_get("/api/getSubmarineMeasurements/:id",
                    by(&AnalysisController::getSubmarineAnalysis));
 
-  router->http_post("api/approveMeasurements/:id",
+  router->http_post("/api/approveMeasurements/:id",
                     by(&AnalysisController::approveAnalysis));
 
-  router->http_post("api/rejectMeasurements/:id",
+  router->http_post("/api/rejectMeasurements/:id",
                     by(&AnalysisController::rejectAnalysis));
 
-  router->http_post("api/handleSubmarineSelection",
+  router->http_post("/api/postMeasurements",
+                    by(&AnalysisController::postMeasurements));
+  router->http_post("/api/handleSubmarineSelection",
                     by(&AnalysisController::handleSubmarineSelection));
 
   return router;

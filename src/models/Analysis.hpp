@@ -23,7 +23,8 @@ class Analysis {
   std::chrono::system_clock::time_point endTime;
   AnalysisStatus status;
 
-template <typename Json_Io>
+ public:
+  template <typename Json_Io>
   void json_io(Json_Io& io) {
     io& json_dto::mandatory("id", id) &
         json_dto::mandatory("submarineId", submarineId) &
@@ -34,7 +35,6 @@ template <typename Json_Io>
         json_dto::mandatory("status", status);
   }
 
- public:
   Analysis() : status(AnalysisStatus::Pending) {
     startTime = std::chrono::system_clock::now();
   }
