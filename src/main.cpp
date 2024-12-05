@@ -17,28 +17,23 @@ auto server_handler() {
     return std::bind(method, measurement_controller, _1, _2);
   };
 
+  // WEBSOCKET ENDPOINT
   router->http_get("/live", by(&MeasurementController::on_live_update));
 
+  // CORS ENDPOINT - PREFLIGHT REQUEST
   router->add_handler(restinio::http_method_options(), "/",
                       by(&MeasurementController::options));
 
-  // router->http_post("api/handleStartMeasurements",
-  //                   by(&AnalysisController::handlestartAnalysis));
-
-  router->http_get("/api/getMeasurementResults/:id",
-                   by(&MeasurementController::getMeasurementResults));
-
-  //   router->http_get("api/getAllMeasurements",
-  //                    by(&AnalysisController::getAllAnalysis));
-
-  router->http_get("/api/getSubmarineMeasurements/:id",
-                   by(&MeasurementController::getSubmarineMeasurements));
+  router->http_post("api/PostMeasurementDepth",
+                    by(&MeasurementController::postMeasurementDepth));
 
   router->http_post("/api/postMeasurements",
                     by(&MeasurementController::postMeasurements));
+
   router->http_post("/api/handleSubmarineSelection",
                     by(&MeasurementController::handleSubmarineSelection));
 
+  // ENDPOINT FOR SUB TO GET MEASUREMENT DEPTH
   router->http_get("/api/getMeasurementDepth",
                    by(&MeasurementController::getMeasurementDepth));
 
