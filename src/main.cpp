@@ -26,7 +26,7 @@ auto server_handler() {
       });
  */
 
-  router->http_get("/api/submarine/:id", by(&SubmarineController::on_submarine_info));
+  /* router->http_get("/api/submarine/:id", by(&SubmarineController::on_submarine_info)); */
  
   router->http_get("/live", by(&AnalysisController::on_live_update));
 
@@ -56,6 +56,8 @@ auto server_handler() {
                     by(&AnalysisController::postMeasurements));
   router->http_post("/api/handleSubmarineSelection",
                     by(&AnalysisController::handleSubmarineSelection));
+
+   router->http_get("/api/getMeasurementDepth/:id", by(&AnalysisController::getMeasurementDepth));
 
   return router;
 }

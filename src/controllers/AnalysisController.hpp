@@ -22,6 +22,15 @@ class AnalysisController {
  public:
   auto handlestartAnalysis();
 
+  auto getMeasurementDepth(const restinio::request_handle_t &req, const restinio::router::route_params_t &params)
+  {
+    auto resp = init_resp(req->create_response());
+
+
+    return resp.done();
+  }; // SKAL RETTES!
+	
+
   auto on_live_update(const restinio::request_handle_t &req,
                       rr ::route_params_t params) {
     if (restinio::http_connection_header_t::upgrade ==
