@@ -2,8 +2,7 @@
 #include <restinio/all.hpp>
 #include <restinio/websocket/websocket.hpp>
 
-#include "./controllers/AnalysisController.hpp"  // Include your SubmarineController header file
-#include "./controllers/SubmarineController.hpp"  // Include your SubmarineController header file
+#include "./controllers/MeasurementController.hpp"  // Include your SubmarineController header file
 
 namespace rr = restinio::router;
 using router_t = rr::express_router_t<>;
@@ -11,53 +10,45 @@ using router_t = rr::express_router_t<>;
 // Function to configure the RESTinio server for the /api/submarines route
 auto server_handler() {
   auto router = std::make_unique<router_t>();
-  auto submarine_controller = std::make_shared<SubmarineController>();
-  auto analysis_controller = std::make_shared<AnalysisController>();
+  auto measurement_controller = std::make_shared<MeasurementController>();
 
   auto by = [&](auto method) {
     using namespace std::placeholders;
-    return std::bind(method, analysis_controller, _1, _2);
+    return std::bind(method, measurement_controller, _1, _2);
   };
 
-  // Handle only the /api/submarines GET request
-  /* router->http_get(
-      "/api/submarines", [submarine_controller](const auto &req, auto params) {
-        return submarine_controller->on_submarine_info(req, params);
-      });
- */
-
-  /* router->http_get("/api/submarine/:id", by(&SubmarineController::on_submarine_info)); */
- 
-  router->http_get("/live", by(&AnalysisController::on_live_update));
+  router->http_get("/live", by(&MeasurementController::on_live_update));
 
   router->add_handler(restinio::http_method_options(), "/",
-                      by(&AnalysisController::options));
-  router->http_get("/get", by(&AnalysisController::testAli));
+                      by(&MeasurementController::options));
+
+  router->http_get("/get", by(&MeasurementController::testAli));
 
   // router->http_post("api/handleStartMeasurements",
   //                   by(&AnalysisController::handlestartAnalysis));
 
   router->http_get("/api/getMeasurementResults/:id",
-                   by(&AnalysisController::getAnalysisResults));
+                   by(&MeasurementController::getAnalysisResults));
 
   //   router->http_get("api/getAllMeasurements",
   //                    by(&AnalysisController::getAllAnalysis));
 
   router->http_get("/api/getSubmarineMeasurements/:id",
-                   by(&AnalysisController::getSubmarineAnalysis));
+                   by(&MeasurementController::getSubmarineAnalysis));
 
   router->http_post("/api/approveMeasurements/:id",
-                    by(&AnalysisController::approveAnalysis));
+                    by(&MeasurementController::approveAnalysis));
 
   router->http_post("/api/rejectMeasurements/:id",
-                    by(&AnalysisController::rejectAnalysis));
+                    by(&MeasurementController::rejectAnalysis));
 
   router->http_post("/api/postMeasurements",
-                    by(&AnalysisController::postMeasurements));
+                    by(&MeasurementController::postMeasurements));
   router->http_post("/api/handleSubmarineSelection",
-                    by(&AnalysisController::handleSubmarineSelection));
+                    by(&MeasurementController::handleSubmarineSelection));
 
-   router->http_get("/api/getMeasurementDepth/:id", by(&AnalysisController::getMeasurementDepth));
+  router->http_get("/api/getMeasurementDepth/:id",
+                   by(&MeasurementController::getMeasurementDepth));
 
   return router;
 }

@@ -1,6 +1,7 @@
 #ifndef ANALYSIS_CONTROLLER_HPP
 #define ANALYSIS_CONTROLLER_HPP
 
+#include <fstream>
 #include <json_dto/pub.hpp>
 #include <restinio/all.hpp>
 #include <vector>
@@ -18,18 +19,21 @@ using traits_t =
                        restinio::single_threaded_ostream_logger_t, router_t>;
 using ws_registry_t = std::map<std::uint64_t, rws::ws_handle_t>;
 
-class AnalysisController {
+class MeasurementController {
  public:
   auto handlestartAnalysis();
 
-  auto getMeasurementDepth(const restinio::request_handle_t &req, const restinio::router::route_params_t &params)
-  {
+  auto getMeasurementDepth(const restinio::request_handle_t &req,
+                           const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
-
-
+    std::ifstream file("filnavn", std::ios::binary | std::ios::ate);
+    if (file.tellg() == 0) {
+      resp.set_body("0");
+    } else {
+      resp.set_body("P");
+    }
     return resp.done();
-  }; // SKAL RETTES!
-	
+  };  // SKAL RETTES!
 
   auto on_live_update(const restinio::request_handle_t &req,
                       rr ::route_params_t params) {
@@ -280,7 +284,7 @@ class AnalysisController {
     // Return the response
     return resp.done();
   }
-  AnalysisController() = default;
+  MeasurementController() = default;
 
  private:
   ws_registry_t m_registry;

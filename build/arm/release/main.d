@@ -65,7 +65,7 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../restinio/websocket/impl/ws_protocol_validator.hpp \
  ../../restinio/websocket/impl/utf8.hpp ../../restinio/utils/base64.hpp \
  ../../restinio/utils/base64_lut.ipp ../../restinio/utils/sha1.hpp \
- src/./controllers/AnalysisController.hpp \
+ src/./controllers/MeasurementController.hpp \
  ../../../../json_dto/dev/json_dto/pub.hpp \
  ../../../../rapidjson/include/rapidjson/document.h \
  ../../../../rapidjson/include/rapidjson/reader.h \
@@ -110,5 +110,4 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/MeasurementData.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/SpringLayer.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/DBUtils.hpp \
- /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Submarine.hpp \
- src/./controllers/SubmarineController.hpp
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Submarine.hpp
