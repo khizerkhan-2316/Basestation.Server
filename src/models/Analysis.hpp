@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "MeasurementData.hpp"
+#include "/home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Measurement.hpp"
 #include "SpringLayer.hpp"
 
 enum class AnalysisStatus { Pending, InProgress, Completed };
@@ -17,7 +17,7 @@ class Analysis {
  private:
   std::string id;
   std::string submarineId;
-  std::vector<MeasurementData> measurements;
+  std::vector<Measurement> measurements;
   std::vector<SpringLayer> springLayers;
   std::chrono::system_clock::time_point startTime;
   std::chrono::system_clock::time_point endTime;
@@ -70,27 +70,27 @@ class Analysis {
     }
   }
 
-  void displayAnalysis() const {
-    std::cout << "Analysis ID: " << id << "\nSubmarine ID: " << submarineId
-              << "\nStatus: ";
-    std::cout << (status == AnalysisStatus::Pending      ? "Pending"
-                  : status == AnalysisStatus::InProgress ? "In Progress"
-                                                         : "Completed")
-              << "\n";
+  // void displayAnalysis() const {
+  //   std::cout << "Analysis ID: " << id << "\nSubmarine ID: " << submarineId
+  //             << "\nStatus: ";
+  //   std::cout << (status == AnalysisStatus::Pending      ? "Pending"
+  //                 : status == AnalysisStatus::InProgress ? "In Progress"
+  //                                                        : "Completed")
+  //             << "\n";
 
-    std::cout << "\nMeasurements:\n";
-    for (const auto& measurement : measurements) {
-      std::cout << "Temp: " << measurement.getTemperature() << " °C, "
-                << "Oxygen: " << measurement.getOxygen() << " %, "
-                << "Pressure: " << measurement.getPressure() << " atm\n";
-    }
+  //   std::cout << "\nMeasurements:\n";
+  //   for (const auto& measurement : measurements) {
+  //     std::cout << "Temp: " << measurement.getTemperature() << " °C, "
+  //               << "Oxygen: " << measurement.getOxygen() << " %, "
+  //               << "Pressure: " << measurement.getPressure() << " atm\n";
+  //   }
 
-    std::cout << "\nSpring Layers:\n";
-    for (const auto& layer : springLayers) {
-      std::cout << "Layer Depth: " << layer.getLayerDepth()
-                << " meters, ID: " << layer.getId() << "\n";
-    }
-  }
+  //   std::cout << "\nSpring Layers:\n";
+  //   for (const auto& layer : springLayers) {
+  //     std::cout << "Layer Depth: " << layer.getLayerDepth()
+  //               << " meters, ID: " << layer.getId() << "\n";
+  //   }
+  // }
 
   const std::string& getId() const { return id; }
 
@@ -100,7 +100,7 @@ class Analysis {
 
   void setSubmarineId(const std::string& subId) { submarineId = subId; }
 
-  const std::vector<MeasurementData>& getMeasurements() const {
+  const std::vector<Measurement>& getMeasurements() const {
     return measurements;
   }
 

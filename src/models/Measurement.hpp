@@ -3,30 +3,25 @@
 #include <iostream>
 #include <vector>
 
-class MeasurementData {
+class Measurement {
  private:
   float temperature;
   float oxygen;
-  float pressure;
+  float depth;
   std::chrono::system_clock::time_point timestamp;
-  bool isMeasurementValid;
 
   template <typename JSON_IO>
   void json_io(JSON_IO& io) {
     io& json_dto::mandatory("temprature", temperature) &
         json_dto::mandatory("oxygen", oxygen) &
-        json_dto::mandatory("pressure", pressure) &
-        json_dto::mandatory("timestamp", timestamp) &
-        json_dto::mandatory("isMeasurementValid", isMeasurementValid);
+        json_dto::mandatory("depth", depth) &
+        json_dto::mandatory("timestamp", timestamp);
   }
 
  public:
   // Constructor to initialize the measurement data
-  MeasurementData(float temp, float oxygen, float pressure)
-      : temperature(temp),
-        oxygen(oxygen),
-        pressure(pressure),
-        isMeasurementValid(true) {
+  Measurement(float temp, float oxygen, float depth)
+      : temperature(temp), oxygen(oxygen), depth(depth) {
     // Set current time as timestamp
     timestamp = std::chrono::system_clock::now();
   }
@@ -36,15 +31,6 @@ class MeasurementData {
 
   // Getter for oxygen
   float getOxygen() const { return oxygen; }
-
-  // Getter for pressure
-  float getPressure() const { return pressure; }
-
-  // Getter for isMeasurementValid
-  bool getIsMeasurementValid() const { return isMeasurementValid; }
-
-  // Setter for isMeasurementValid
-  void setIsMeasurementValid(bool isValid) { isMeasurementValid = isValid; }
 
   // Method to get formatted timestamp as a string
   std::string getFormattedTimestamp() const {
@@ -60,8 +46,6 @@ class MeasurementData {
     std::cout << "Timestamp: " << getFormattedTimestamp() << std::endl;
     std::cout << "Temperature: " << temperature << " °C" << std::endl;
     std::cout << "Oxygen: " << oxygen << " %" << std::endl;
-    std::cout << "Pressure: " << pressure << " atm" << std::endl;
-    std::cout << "Measurement Valid: " << (isMeasurementValid ? "Yes" : "No")
-              << std::endl;
+    std::cout << "Depth: " << depth << " atm" << std::endl;
   }
 };

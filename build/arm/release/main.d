@@ -107,7 +107,7 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../../../rapidjson/include/rapidjson/istreamwrapper.h \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/AnalysisRepo.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Analysis.hpp \
- /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/MeasurementData.hpp \
+ /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Measurement.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/SpringLayer.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/DBUtils.hpp \
  /home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Submarine.hpp

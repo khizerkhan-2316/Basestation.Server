@@ -79,12 +79,14 @@ class MeasurementController {
 
     sendMessage(requestBody);
 
-    // Analysis a;
+
+
+    Analysis a;
 
     // json_dto::from_json(requestBody, a);
 
-    // AnalysisRepository ar("home/stud/text.txt");
-    // ar.saveAnalysis(a);
+    AnalysisRepository ar("/home/root/text.txt");
+    ar.saveAnalysis(a);
     resp.set_body("hej");
 
     return resp.done();

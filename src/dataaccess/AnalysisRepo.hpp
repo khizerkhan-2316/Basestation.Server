@@ -19,13 +19,12 @@ class AnalysisRepository {
     record["submarineId"] = analysis.getSubmarineId();
 
     // Serialize measurements
-    std::ostringstream measurementsStream;
-    for (const auto& measurement : analysis.getMeasurements()) {
-      measurementsStream << measurement.getTemperature() << ","
-                         << measurement.getOxygen() << ","
-                         << measurement.getPressure() << ";";
-    }
-    record["measurements"] = measurementsStream.str();
+    // std::ostringstream measurementsStream;
+    // for (const auto& measurement : analysis.getMeasurements(<)) {
+    //   measurementsStream << measurement.getTemperature() << ","
+    //                      << measurement.getOxygen() << ",";
+    // }
+    // record["measurements"] = measurementsStream.str();
 
     // Serialize spring layers
     std::ostringstream springLayersStream;
