@@ -20,11 +20,14 @@ auto server_handler() {
   };
 
   // Handle only the /api/submarines GET request
-  router->http_get(
+  /* router->http_get(
       "/api/submarines", [submarine_controller](const auto &req, auto params) {
         return submarine_controller->on_submarine_info(req, params);
       });
+ */
 
+  router->http_get("/api/submarine/:id", by(&SubmarineController::on_submarine_info));
+ 
   router->http_get("/live", by(&AnalysisController::on_live_update));
 
   router->add_handler(restinio::http_method_options(), "/",
