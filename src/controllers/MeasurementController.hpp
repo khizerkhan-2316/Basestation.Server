@@ -81,7 +81,7 @@ class MeasurementController {
   }
 
   // Handler for the `/api/analysis/:id` route
-  auto getAnalysisResults(
+  auto getMeasurementResults(
       const restinio::request_handle_t &req,
       const restinio::router::route_params_t &params) const {
     // Create a response object
@@ -116,18 +116,7 @@ class MeasurementController {
 
   // Handler for the `/api/submarine/:submarineId/analysis` route
 
-  auto testAli(const restinio::request_handle_t &req,
-               const restinio::router::route_params_t &params) {
-    auto resp = init_resp(req->create_response());
-
-    resp.set_body("hej");
-    sendMessage("det virker" + std::to_string(1));
-
-    // Return the response
-    return resp.done();
-  }
-
-  auto getSubmarineAnalysis(
+  auto getSubmarineMeasurements(
       const restinio::request_handle_t &req,
       const restinio::router::route_params_t &params) const {
     // Create a response object
@@ -160,75 +149,6 @@ class MeasurementController {
     // Set the JSON body as the response
     resp.set_body(json_body);
     sendMessage("det virker" + std::to_string(1));
-
-    // Return the response
-    return resp.done();
-  }
-
-  // Handler for the `/api/analysis/:id/approve` route
-  auto approveAnalysis(const restinio::request_handle_t &req,
-                       const restinio::router::route_params_t &params) const {
-    // Create a response object
-    auto resp = init_resp(req->create_response());
-    // Get the `id` parameter from the URL
-    std::string id = restinio::cast_to<std::string>(params["id"]);
-
-    // Logic to approve the analysis (replace this with real data handling)
-    bool success = true;  // Simulate success in approval
-    std::string message;
-
-    if (success) {
-      message = "Analysis with ID " + id + " has been approved.";
-    } else {
-      message = "Failed to approve analysis with ID " + id + ".";
-    }
-
-    // Create a JSON response body
-    std::string json_body = R"({
-        "id": ")" + id + R"(",
-        "status": ")" + (success ? "success" : "failure") +
-                            R"(",
-        "message": ")" + message +
-                            R"("
-    })";
-
-    // Set the JSON body as the response
-    resp.set_body(json_body);
-
-    // Return the response
-    return resp.done();
-  }
-
-  // Handler for the `/api/analysis/:id/reject` route
-  auto rejectAnalysis(const restinio::request_handle_t &req,
-                      const restinio::router::route_params_t &params) const {
-    // Create a response object
-    auto resp = init_resp(req->create_response());
-
-    // Get the `id` parameter from the URL
-    std::string id = restinio::cast_to<std::string>(params["id"]);
-
-    // Logic to reject the analysis (replace this with real data handling)
-    bool success = true;  // Simulate success in rejection
-    std::string message;
-
-    if (success) {
-      message = "Analysis with ID " + id + " has been rejected.";
-    } else {
-      message = "Failed to reject analysis with ID " + id + ".";
-    }
-
-    // Create a JSON response body
-    std::string json_body = R"({
-        "id": ")" + id + R"(",
-        "status": ")" + (success ? "success" : "failure") +
-                            R"(",
-        "message": ")" + message +
-                            R"("
-    })";
-
-    // Set the JSON body as the response
-    resp.set_body(json_body);
 
     // Return the response
     return resp.done();

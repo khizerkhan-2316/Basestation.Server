@@ -22,32 +22,24 @@ auto server_handler() {
   router->add_handler(restinio::http_method_options(), "/",
                       by(&MeasurementController::options));
 
-  router->http_get("/get", by(&MeasurementController::testAli));
-
   // router->http_post("api/handleStartMeasurements",
   //                   by(&AnalysisController::handlestartAnalysis));
 
   router->http_get("/api/getMeasurementResults/:id",
-                   by(&MeasurementController::getAnalysisResults));
+                   by(&MeasurementController::getMeasurementResults));
 
   //   router->http_get("api/getAllMeasurements",
   //                    by(&AnalysisController::getAllAnalysis));
 
   router->http_get("/api/getSubmarineMeasurements/:id",
-                   by(&MeasurementController::getSubmarineAnalysis));
-
-  router->http_post("/api/approveMeasurements/:id",
-                    by(&MeasurementController::approveAnalysis));
-
-  router->http_post("/api/rejectMeasurements/:id",
-                    by(&MeasurementController::rejectAnalysis));
+                   by(&MeasurementController::getSubmarineMeasurements));
 
   router->http_post("/api/postMeasurements",
                     by(&MeasurementController::postMeasurements));
   router->http_post("/api/handleSubmarineSelection",
                     by(&MeasurementController::handleSubmarineSelection));
 
-  router->http_get("/api/getMeasurementDepth/:id",
+  router->http_get("/api/getMeasurementDepth",
                    by(&MeasurementController::getMeasurementDepth));
 
   return router;
