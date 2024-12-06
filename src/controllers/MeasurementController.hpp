@@ -6,9 +6,8 @@
 #include <restinio/all.hpp>
 #include <vector>
 
-#include "/home/stud/ngk/restinio/dev/sample/Basestation.Server/src/dataaccess/AnalysisRepo.hpp"
-#include "/home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Analysis.hpp"
-#include "/home/stud/ngk/restinio/dev/sample/Basestation.Server/src/models/Submarine.hpp"
+#include "../models/Submarine.hpp"
+#include "../services/MVPserver.hpp"
 
 namespace rr = restinio::router;
 using router_t = rr::express_router_t<>;
@@ -72,21 +71,15 @@ class MeasurementController {
   }
 
   auto postMeasurements(const restinio::request_handle_t &req,
-                        const restinio::router::route_params_t &params) const {
+                        const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
 
     std::string requestBody = req->body();
 
     sendMessage(requestBody);
 
+    systemController_.handleMeasurements(requestBody);
 
-
-    Analysis a;
-
-    // json_dto::from_json(requestBody, a);
-
-    AnalysisRepository ar("/home/root/text.txt");
-    ar.saveAnalysis(a);
     resp.set_body("hej");
 
     return resp.done();
@@ -230,6 +223,7 @@ class MeasurementController {
 
  private:
   ws_registry_t m_registry;
+  MVPServer systemController_;
 
   void sendMessage(std::string message) const {
     for (auto [k, v] : m_registry)

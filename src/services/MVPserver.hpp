@@ -3,41 +3,22 @@
 #include <unordered_map>
 #include <vector>
 #include <restinio/all.hpp>
-#include <./dataaccess/AnalysisRepo.hpp>
-#include <./dataaccess/MeasurementRepo.hpp>
-#include <./dataaccess/SpringLayerRepo.hpp>
+#include "../dataaccess/SQLiteRepo.hpp"
+#include "../utils/GUIDGenerator.hpp"
+#include "../models/Measurement.hpp"
 
 // #include "WifiCommunicationService.hpp"
 
 class MVPServer {
 private:
-    AnalysisRepository analysisRepo;
-    MeasurementRepository measurementRepo;
-    SpringLayerRepository springLayerRepo;
+    SQLite db_;
+
 
 public:
-    MVPServer(AnalysisRepository& analysisRepository, MeasurementRepository& measurementRepository, SpringLayerRepository& springLayerRepository)
-        : analysisRepo(analysisRepository), measurementRepo(measurementRepository), springLayerRepo(springLayerRepository) {}
+    MVPServer() {}
 
     // Starts a new analysis
-    void startAnalysis() {
-        Analysis newAnalysis;
-        newAnalysis.addMeasurement(25.0f, 21.0f, 1.0f); // Dummy data, assume analysis starts with a default measurement
-        analysisRepo.saveAnalysis(newAnalysis);
-        std::cout << "Analysis started." << std::endl;
-    }
-
-    // Add a measurement to an existing analysis
-    void addMeasurement(const std::string& analysisId, const MeasurementData& measurement) {
-        try {
-            Analysis analysis = analysisRepo.retrieveAnalysisById(analysisId);
-            analysis.addMeasurement(measurement.getTemperature(), measurement.getOxygen(), measurement.getPressure());
-            analysisRepo.updateAnalysis(analysis);
-            std::cout << "Measurement added to analysis." << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Error adding measurement: " << e.what() << std::endl;
-        }
-    }
+    /*
 
     // Analyze the spring layers associated with an analysis
     Analysis analyseSpringLayers(const std::string& analysisId) {
@@ -54,8 +35,7 @@ public:
             std::cerr << "Error analyzing spring layers: " << e.what() << std::endl;
             throw;
         }
-    }
-
+    }  
     // Approve the spring layers for an analysis
     Analysis approveSpringLayers(const std::string& analysisId, const std::vector<std::string>& springLayerIds) {
         try {
@@ -73,6 +53,34 @@ public:
         }
     }
 
+    */
+
+
+  void handleMeasurements(const std::string& measurements) {
+    try {
+        // Generate the grouping ID for this batch of measurements
+        std::string groupingId = GUIDGenerator::generateGUID();
+
+        // Parse the JSON string into a vector of Measurement objects
+        std::vector<Measurement> parsedMeasurements = json_dto::from_json<std::vector<Measurement>>(measurements);
+
+        // Iterate over the parsed measurements array and process each Measurement
+        for (auto& measurement : parsedMeasurements) {
+            // Set the groupingId for the measurement
+            measurement.setGroupingId(groupingId);
+
+            // Write the Measurement object to the database (assuming db_ is available)
+            db_.write(measurement);
+        }
+    } catch (const std::exception& ex) {
+        // Handle any exceptions that occur during parsing or database operations
+        std::cerr << "Error parsing measurements: " << ex.what() << std::endl;
+    }
+}
+
+
+
+/*
     // Reject spring layers for an analysis
     Analysis rejectSpringLayers(const std::string& analysisId) {
         try {
@@ -87,54 +95,12 @@ public:
         }
     }
 
+    */
+
+
     // Complete the analysis
-    Analysis completeAnalysis(const std::string& analysisId) {
-        try {
-            Analysis analysis = analysisRepo.retrieveAnalysisById(analysisId);
-            analysis.complete();  // Assuming there's a method that sets the status to completed
-            analysisRepo.updateAnalysis(analysis);
-            std::cout << "Analysis completed." << std::endl;
-            return analysis;
-        } catch (const std::exception& e) {
-            std::cerr << "Error completing analysis: " << e.what() << std::endl;
-            throw;
-        }
-    }
+   
 
-    // Retrieve an analysis by its ID
-    Analysis getAnalysisById(const std::string& id) {
-        try {
-            return analysisRepo.retrieveAnalysisById(id);
-        } catch (const std::exception& e) {
-            std::cerr << "Error retrieving analysis: " << e.what() << std::endl;
-            throw;
-        }
-    }
+  
 
-    // Get all analyses
-    std::vector<Analysis> getAllAnalysis() {
-        try {
-            return analysisRepo.getAllAnalysis();
-        } catch (const std::exception& e) {
-            std::cerr << "Error retrieving all analyses: " << e.what() << std::endl;
-            throw;
-        }
-    }
-
-    // Get the status of an analysis
-    std::string getAnalysisStatus(const std::string& analysisId) {
-        try {
-            Analysis analysis = analysisRepo.retrieveAnalysisById(analysisId);
-            return (analysis.getStatus() == AnalysisStatus::Completed) ? "Completed" : "In Progress";
-        } catch (const std::exception& e) {
-            std::cerr << "Error getting analysis status: " << e.what() << std::endl;
-            throw;
-        }
-    }
-
-    // Check if the submarine is available (mock implementation)
-    bool isSubmarineAvailable() {
-        // For simplicity, assume it's always available
-        return true;
-    }
 };

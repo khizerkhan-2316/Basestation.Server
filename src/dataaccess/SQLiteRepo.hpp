@@ -1,21 +1,24 @@
-
+#include "../models/Measurement.hpp"
 #include <sqlite3.h>
+
 
 #include <iostream>
 
 class SQLite {
-  static void write(Measurement measurement) {
+  public:
+
+   void write(Measurement measurement) {
     sqlite3* db;
     sqlite3_open("Measurement.db", &db);  // Open the database
 
     // Prepare the SQL statement with the correct column names
     std::string sql =
-        "INSERT INTO Measurements (temprature, oxygen, depth, groupingId) "
+        "INSERT INTO Measurements (temperature, oxygen, depth, groupingId, timestamp) "
         "VALUES "
         "(" +
-        std::to_string(measurement.temprature) + ", " +
-        std::to_string(measurement.oxygen) + ", " + std::to_string(depth) +
-        ", " + std::to_string(groupingId) + "," + std::to_string(timestamp) +
+        std::to_string(measurement.getTemperature()) + ", " +
+        std::to_string(measurement.getOxygen()) + ", " + std::to_string(measurement.getDepth()) +
+        ", " + measurement.getGroupingId() + "," + measurement.getTimeStamp() +
         ");";
 
     // Execute the query
@@ -26,4 +29,4 @@ class SQLite {
   }
 
   static void read() {}
-}
+};
