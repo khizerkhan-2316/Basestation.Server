@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <restinio/all.hpp>
-#include "../dataaccess/SQLiteRepo.hpp"
+#include "../dataaccess/MeasurementRepository.hpp"
 #include "../utils/GUIDGenerator.hpp"
 #include "../models/Measurement.hpp"
 
@@ -11,7 +11,7 @@
 
 class MVPServer {
 private:
-    SQLite db_;
+    MeasurementRepository measurementRepository_;
 
 
 public:
@@ -58,6 +58,8 @@ public:
 
   void handleMeasurements(const std::string& measurements) {
     try {
+
+        std::cout << "Measurements!!::" <<  measurements << std::endl;
         // Generate the grouping ID for this batch of measurements
         std::string groupingId = GUIDGenerator::generateGUID();
 
@@ -66,16 +68,23 @@ public:
 
         // Iterate over the parsed measurements array and process each Measurement
         for (auto& measurement : parsedMeasurements) {
+
+            std::cout << measurement.getOxygen() << std::endl;
             // Set the groupingId for the measurement
             measurement.setGroupingId(groupingId);
 
             // Write the Measurement object to the database (assuming db_ is available)
-            db_.write(measurement);
+            measurementRepository_.write(measurement);
         }
     } catch (const std::exception& ex) {
         // Handle any exceptions that occur during parsing or database operations
         std::cerr << "Error parsing measurements: " << ex.what() << std::endl;
     }
+}
+
+std::vector<Measurement> getAllMeasurements()
+{
+    return measurementRepository_.read();
 }
 
 

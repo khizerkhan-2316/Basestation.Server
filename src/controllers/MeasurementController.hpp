@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef ANALYSIS_CONTROLLER_HPP
 #define ANALYSIS_CONTROLLER_HPP
 
@@ -81,6 +83,17 @@ class MeasurementController {
     systemController_.handleMeasurements(requestBody);
 
     resp.set_body("hej");
+
+    return resp.done();
+  }
+
+
+  auto getMeasurements(const restinio::request_handle_t &req,
+                        const restinio::router::route_params_t &params) {
+    auto resp = init_resp(req->create_response());
+
+    
+    resp.set_body(json_dto::to_json(systemController_.getAllMeasurements()));
 
     return resp.done();
   }

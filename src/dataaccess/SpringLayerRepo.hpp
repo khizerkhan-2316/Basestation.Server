@@ -1,4 +1,4 @@
-
+#pragma once
 #include "DBUtils.hpp"
 
 class SpringLayer {
