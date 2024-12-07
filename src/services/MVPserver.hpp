@@ -6,6 +6,8 @@
 #include "../dataaccess/MeasurementRepository.hpp"
 #include "../utils/GUIDGenerator.hpp"
 #include "../models/Measurement.hpp"
+#include <cstdint>
+#include <sstream>   
 
 // #include "WifiCommunicationService.hpp"
 
@@ -87,6 +89,24 @@ std::vector<Measurement> getAllMeasurements()
     return measurementRepository_.read();
 }
 
+bool isHardwareTestValid(uint8_t byte)
+{
+    if (!byte) return "OK. Ingen fejl.";
+    std::stringstream ss;
+    const char* errormsg [5] = {"Temperature sensor", 
+                                "Depth Sensor", 
+                                "Oxygen sensor",
+                                "Actuator water take-in",
+                                "Actuator water push-out"};
+    for(int i=0; i<5; i++)
+    if(byte & (1<<i))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 
 
 /*
@@ -109,6 +129,7 @@ std::vector<Measurement> getAllMeasurements()
 
     // Complete the analysis
    
+
 
   
 

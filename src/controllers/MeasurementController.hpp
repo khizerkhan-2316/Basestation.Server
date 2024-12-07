@@ -7,6 +7,7 @@
 #include <json_dto/pub.hpp>
 #include <restinio/all.hpp>
 #include <vector>
+#include <cstdint>
 
 #include "../models/Submarine.hpp"
 #include "../services/MVPserver.hpp"
@@ -22,19 +23,22 @@ using ws_registry_t = std::map<std::uint64_t, rws::ws_handle_t>;
 
 class MeasurementController {
  public:
-  auto handlestartAnalysis();
+  
+  MeasurementController()
+  {
+    measurementDepth="";
+  }
 
   auto getMeasurementDepth(const restinio::request_handle_t &req,
                            const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
-    std::ifstream file("filnavn", std::ios::binary | std::ios::ate);
-    if (file.tellg() == 0) {
-      resp.set_body("0");
-    } else {
-      resp.set_body("P");
-    }
+
+    if(measurementDepth!="")
+
+    resp.set_body(measurementDepth);
+
     return resp.done();
-  };  // SKAL RETTES!
+  };  
 
   auto on_live_update(const restinio::request_handle_t &req,
                       rr ::route_params_t params) {
@@ -54,20 +58,14 @@ class MeasurementController {
 
   auto postMeasurementDepth(
       const restinio::request_handle_t &req,
-      const restinio::router::route_params_t &params) const {
+      const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
 
-    std::string requestBody = req->body();
 
-    sendMessage(requestBody);
 
-    // Analysis a;
-
-    // json_dto::from_json(requestBody, a);
-
-    // AnalysisRepository ar("home/stud/text.txt");
-    // ar.saveAnalysis(a);
-    resp.set_body("hej");
+    measurementDepth = req->body();
+    
+    resp.set_body("Measurement depth has been received");
 
     return resp.done();
   }
@@ -182,6 +180,27 @@ class MeasurementController {
     return resp.done();
   }
 
+  auto postHardwareTest(const restinio::request_handle_t &req,
+                        const restinio::router::route_params_t &params) {
+    auto resp = init_resp(req->create_response());
+
+  std::string body = req->body();
+
+    uint8_t byte = static_cast<uint8_t>(body[0]);
+
+    bool isHardwareTestValid = systemController_.isHardwareTestValid(byte);
+
+
+    std::string responseMessage = isHardwareTestValid ? "success" : "failure";
+    
+    std::string jsonResponse = "{\"status\":\"" + responseMessage + "\", \"message\":\"" + (isHardwareTestValid ? "Hardware test successful!" : "Hardware test failed!") + "\"}";
+
+    sendMessage(jsonResponse);
+
+    return resp.done();
+  }
+
+  
   // Handler for the `/api/submarine/select` route
   auto handleSubmarineSelection(
       const restinio::request_handle_t &req,
@@ -232,9 +251,11 @@ class MeasurementController {
     // Return the response
     return resp.done();
   }
-  MeasurementController() = default;
 
  private:
+  std::string measurementDepth;
+
+
   ws_registry_t m_registry;
   MVPServer systemController_;
 

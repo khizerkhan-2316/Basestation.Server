@@ -19,22 +19,28 @@ auto server_handler() {
 
   // WEBSOCKET ENDPOINT
   router->http_get("/live", by(&MeasurementController::on_live_update));
+
+
+  //WEBKLIENT GET ALL MEASUREMENTS FROM DATABASE ON LOAD.
   router->http_get("/measurements", by(&MeasurementController::getMeasurements));
 
   // CORS ENDPOINT - PREFLIGHT REQUEST
   router->add_handler(restinio::http_method_options(), "/",
                       by(&MeasurementController::options));
 
-  router->http_post("api/PostMeasurementDepth",
-                    by(&MeasurementController::postMeasurementDepth));
 
+  //SUBMARINE POST MEASUREMENTS AFTER A DIVE
   router->http_post("/api/postMeasurements",
                     by(&MeasurementController::postMeasurements));
 
-  router->http_post("/api/handleSubmarineSelection",
-                    by(&MeasurementController::handleSubmarineSelection));
+  //SUBMARINE POST HARDWARETEST RESULT
+  router->http_post("api/postHardwareTestResult",
+                    by(&MeasurementController::postMeasurementDepth));
 
-  // ENDPOINT FOR SUB TO GET MEASUREMENT DEPTH
+  //WEBKLIENT POST MEASUREMENT DEPTH
+  router->http_post("api/PostMeasurementDepth",
+                    by(&MeasurementController::postMeasurementDepth));
+  //SUBMARINE GET MEASUREMENT DEPTH
   router->http_get("/api/getMeasurementDepth",
                    by(&MeasurementController::getMeasurementDepth));
 

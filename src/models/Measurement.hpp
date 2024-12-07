@@ -26,7 +26,7 @@ void json_io(JSON_IO& io) {
        & json_dto::mandatory("dybde", depth)
        & json_dto::optional("groupingId", groupingId, "")
        & json_dto::optional("id", id, 0)
-       & json_dto::optional("timestamp", timestamp, "");  // Optional timestamp, default to current time
+       & json_dto::optional("timestamp", timestamp, getFormattedTimestamp(std::chrono::system_clock::now()));  // Optional timestamp, default to current time
 }
 
 
