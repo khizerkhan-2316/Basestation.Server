@@ -1,8 +1,9 @@
 #include <iostream>
 #include <restinio/all.hpp>
 #include <restinio/websocket/websocket.hpp>
-#include "./dataaccess/SQLite.hpp"
+
 #include "./controllers/MeasurementController.hpp"  // Include your SubmarineController header file
+#include "./dataaccess/SQLite.hpp"
 
 namespace rr = restinio::router;
 using router_t = rr::express_router_t<>;
@@ -20,27 +21,26 @@ auto server_handler() {
   // WEBSOCKET ENDPOINT
   router->http_get("/live", by(&MeasurementController::on_live_update));
 
-
-  //WEBKLIENT GET ALL MEASUREMENTS FROM DATABASE ON LOAD.
-  router->http_get("/measurements", by(&MeasurementController::getMeasurements));
+  // WEBKLIENT GET ALL MEASUREMENTS FROM DATABASE ON LOAD.
+  router->http_get("/measurements",
+                   by(&MeasurementController::getMeasurements));
 
   // CORS ENDPOINT - PREFLIGHT REQUEST
   router->add_handler(restinio::http_method_options(), "/",
                       by(&MeasurementController::options));
 
-
-  //SUBMARINE POST MEASUREMENTS AFTER A DIVE
+  // SUBMARINE POST MEASUREMENTS AFTER A DIVE
   router->http_post("/api/postMeasurements",
                     by(&MeasurementController::postMeasurements));
 
-  //SUBMARINE POST HARDWARETEST RESULT
-  router->http_post("api/postHardwareTestResult",
-                    by(&MeasurementController::postMeasurementDepth));
+  // SUBMARINE POST HARDWARETEST RESULT
+  router->http_post("/api/postHardwareTestResult",
+                    by(&MeasurementController::postHardwareTestResult));
 
-  //WEBKLIENT POST MEASUREMENT DEPTH
-  router->http_post("api/PostMeasurementDepth",
+  // WEBKLIENT POST MEASUREMENT DEPTH
+  router->http_post("/api/PostMeasurementDepth",
                     by(&MeasurementController::postMeasurementDepth));
-  //SUBMARINE GET MEASUREMENT DEPTH
+  // SUBMARINE GET MEASUREMENT DEPTH
   router->http_get("/api/getMeasurementDepth",
                    by(&MeasurementController::getMeasurementDepth));
 
@@ -53,13 +53,12 @@ int main() {
   std::cout << "Server running at http://192.168.0.1:8080" << std::endl;
 
   try {
-
-     SQLite& db = SQLite::getInstance("Measurement.db");
+    SQLite& db = SQLite::getInstance("Measurement.db");
 
     if (db.initializeScript()) {
-        std::cout << "Database and table initialized successfully." << std::endl;
+      std::cout << "Database and table initialized successfully." << std::endl;
     } else {
-        std::cerr << "Failed to initialize database or table." << std::endl;
+      std::cerr << "Failed to initialize database or table." << std::endl;
     }
 
     using traits_t =
@@ -74,7 +73,7 @@ int main() {
                       .read_next_http_message_timelimit(100s)
                       .write_http_response_timelimit(10s)
                       .handle_request_timeout(10s));
-  } catch (const std::exception &ex) {
+  } catch (const std::exception& ex) {
     std::cerr << "Error: " << ex.what() << std::endl;
     return 1;
   }

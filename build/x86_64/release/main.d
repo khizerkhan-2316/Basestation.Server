@@ -1,4 +1,4 @@
-build/arm/release/build/arm/release/main.o: src/main.cpp \
+build/x86_64/release/build/x86_64/release/main.o: src/main.cpp \
  ../../restinio/all.hpp ../../restinio/core.hpp \
  ../../restinio/version.hpp ../../restinio/asio_include.hpp \
  ../../restinio/settings.hpp ../../restinio/exception.hpp \
@@ -107,7 +107,6 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../../../rapidjson/include/rapidjson/istreamwrapper.h \
  src/./controllers/../models/Submarine.hpp \
  src/./controllers/../services/MVPserver.hpp \
- src/./controllers/../services/../dataaccess/MeasurementRepository.hpp \
+ src/./controllers/../services/../dataaccess/SQLiteRepo.hpp \
  src/./controllers/../services/../dataaccess/../models/Measurement.hpp \
- src/./controllers/../services/../dataaccess/./SQLite.hpp \
  src/./controllers/../services/../utils/GUIDGenerator.hpp
