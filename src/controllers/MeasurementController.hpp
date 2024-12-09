@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "../models/Submarine.hpp"
+#include "../models/MeasurementDepth.hpp"
 #include "../services/MVPserver.hpp"
 
 namespace rr = restinio::router;
@@ -21,17 +22,33 @@ using traits_t =
                        restinio::single_threaded_ostream_logger_t, router_t>;
 using ws_registry_t = std::map<std::uint64_t, rws::ws_handle_t>;
 
+
+
+ 
+
 class MeasurementController {
  public:
   MeasurementController() { measurementDepth = ""; }
 
   auto getMeasurementDepth(const restinio::request_handle_t &req,
                            const restinio::router::route_params_t &params) {
-    auto resp = init_resp(req->create_response());
+    
+        auto resp = init_resp(req->create_response());  // Create the response object
 
-    if (measurementDepth != "") resp.set_body(measurementDepth);
+    if (measurementDepth != "") {
+        // Set the response to 200 OK
+        resp.append_header(restinio::http_field::content_type, "text/plain; charset=utf-8").set_body("P" + measurementDepth); 
+        
+        measurementDepth = "";
+        
+         // Add the measurement depth
+        return resp.done();
+    } else {
+        // Set the response to 204 No Content
+        resp.header().status_line(restinio::status_no_content());
+        return resp.done();
+    }
 
-    return resp.done();
   }
 
   auto postHardwareTestResult(const restinio::request_handle_t &req,
@@ -66,18 +83,53 @@ class MeasurementController {
                             const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
 
-    measurementDepth = req->body();
+        // Extract the raw request body
+        std::string body = req->body();
 
-    resp.set_body("Measurement depth has been received");
+        // Output the raw body (for debugging)
+        std::cout << "Received Body: " << body << std::endl;
 
-    return resp.done();
-  }
+        try {
+            // Deserialize JSON body into MeasurementDepth object
+            MeasurementDepth data;
+            json_dto::from_json(body, data);
+
+            // Now, measurementDepth is extracted from the JSON and stored in the Server instance
+            measurementDepth = data.measurementDepth;
+
+            // Log the measurementDepth
+            std::cout << "Measurement Depth: " << measurementDepth << std::endl;
+
+            // Set response body
+
+    std::string response_body = R"({
+        "message": "success",
+        "details": "MeasurementDepth received successfully"
+    })";
+
+    // Set the response body
+    resp.set_body(response_body);
+            // Respond back to the client
+
+            return resp.done();
+        } catch (const std::exception& e) {
+            // Handle errors (e.g., invalid JSON or missing key)
+            std::cout << "Error parsing JSON: " << e.what() << std::endl;
+            resp.set_body("Invalid JSON or missing 'measurementDepth' field");
+            return resp.done();
+        }
+
+
+    }
+  
 
   auto postMeasurements(const restinio::request_handle_t &req,
                         const restinio::router::route_params_t &params) {
     auto resp = init_resp(req->create_response());
 
     std::string requestBody = req->body();
+
+    std::cout << "MEASUREMENTS RECIEVED FROM SUB: " << requestBody << std::endl;
 
     sendMessage(requestBody);
 
@@ -97,15 +149,14 @@ class MeasurementController {
     return resp.done();
   }
 
-  auto options(restinio::request_handle_t req,
-               restinio::router::route_params_t) {
-    const auto methods = "OPTIONS, GET, POST, PATCH, DELETE, PUT";
-    auto resp = init_resp(req->create_response());
-    resp.append_header(restinio::http_field::access_control_allow_methods,
-                       methods);
-    resp.append_header(restinio::http_field::access_control_max_age, "86400");
-    return resp.done();
-  }
+  auto options(const restinio::request_handle_t& req, rr::route_params_t)
+    {
+        auto resp = init_resp(req->create_response());
+        resp.append_header("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT")
+            .append_header("Access-Control-Allow-Headers", "Content-Type")
+            .append_header("Access-Control-Max-Age", "86400");
+        return resp.done();
+    }
 
   // Handler for the `/api/analysis/:id` route
   auto getMeasurementResults(
@@ -183,21 +234,32 @@ class MeasurementController {
 
   auto postHardwareTest(const restinio::request_handle_t &req,
                         const restinio::router::route_params_t &params) {
+
     auto resp = init_resp(req->create_response());
 
     std::string body = req->body();
 
+    std::cout << "REQUEST BODY:" << body << std::endl;
+
     uint8_t byte = static_cast<uint8_t>(body[0]);
+
+
+    std::cout << "BYTE:" << byte << std::endl;
 
     bool isHardwareTestValid = systemController_.isHardwareTestValid(byte);
 
+    std::cout << "isHardwareTestValid: " << isHardwareTestValid << std::endl;
+
     std::string responseMessage = isHardwareTestValid ? "success" : "failure";
 
-    std::string jsonResponse =
-        "{\"status\":\"" + responseMessage + "\", \"message\":\"" +
-        (isHardwareTestValid ? "Hardware test successful!"
-                             : "Hardware test failed!") +
-        "\"}";
+    std::cout <<  "RESPONSE MESSAGE HARDWARE TEST:" << responseMessage << std::endl;
+
+    std::string jsonResponse = "{ \"type\": \"hardwareTest\", \"payload\": { "
+                            "\"status\": \"" + std::string(isHardwareTestValid ? "passed" : "failed") + "\", "
+                            "\"details\": \"" + std::string(isHardwareTestValid ? "All tests successful" : "Some tests failed") + "\" } }";
+
+
+    std::cout << "JSON RESPONSE:" << jsonResponse << std::endl;
 
     sendMessage(jsonResponse);
 
@@ -265,14 +327,17 @@ class MeasurementController {
     for (auto [k, v] : m_registry)
       v->send_message(rws::final_frame, rws::opcode_t::text_frame, message);
   }
-  template <typename RESP>
-  static RESP init_resp(RESP resp) {
-    resp.append_header("Server", "RESTinio sample server /v.0.6")
-        .append_header_date_field()
-        .append_header("Content-Type", "application/json")
-        .append_header(restinio::http_field::access_control_allow_origin, "*");
-    return resp;
-  }
+  template < typename RESP >
+    static RESP
+        init_resp(RESP resp)
+    {
+        resp
+            .append_header("Server", "RESTinio sample server /v.0.6")
+            .append_header_date_field()
+            .append_header("Content-Type", "application/json")
+            .append_header("Access-Control-Allow-Origin", "*"); // Inkludere CORS:
+        return resp;
+    }
 };
 
-#endif  // SUBMARINE_CONTROLLER_HPP
+#endif  

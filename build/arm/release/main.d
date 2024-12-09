@@ -106,6 +106,7 @@ build/arm/release/build/arm/release/main.o: src/main.cpp \
  ../../../../rapidjson/include/rapidjson/ostreamwrapper.h \
  ../../../../rapidjson/include/rapidjson/istreamwrapper.h \
  src/./controllers/../models/Submarine.hpp \
+ src/./controllers/../models/MeasurementDepth.hpp \
  src/./controllers/../services/MVPserver.hpp \
  src/./controllers/../services/../dataaccess/MeasurementRepository.hpp \
  src/./controllers/../services/../dataaccess/../models/Measurement.hpp \

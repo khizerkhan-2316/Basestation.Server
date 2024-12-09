@@ -34,12 +34,23 @@ auto server_handler() {
                     by(&MeasurementController::postMeasurements));
 
   // SUBMARINE POST HARDWARETEST RESULT
+
+  
   router->http_post("/api/postHardwareTestResult",
-                    by(&MeasurementController::postHardwareTestResult));
+                    by(&MeasurementController::postHardwareTest));
 
   // WEBKLIENT POST MEASUREMENT DEPTH
   router->http_post("/api/PostMeasurementDepth",
                     by(&MeasurementController::postMeasurementDepth));
+
+
+                    //cors options: 
+
+
+             router->add_handler(restinio::http_method_options(), R"(/api/PostMeasurementDepth)",
+                      by(&MeasurementController::options)); 
+                      
+
   // SUBMARINE GET MEASUREMENT DEPTH
   router->http_get("/api/getMeasurementDepth",
                    by(&MeasurementController::getMeasurementDepth));

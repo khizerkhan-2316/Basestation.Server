@@ -91,6 +91,18 @@ std::vector<Measurement> getAllMeasurements()
 
 bool isHardwareTestValid(uint8_t byte)
 {
+
+        std::cout << "BYTE INSIDE ISHARDWARETEST VALID:" << byte << std::endl;
+
+    if (!byte)
+    {
+            return true;
+
+    } else
+    {
+
+        return false;
+    }
     if (!byte) return "OK. Ingen fejl.";
     std::stringstream ss;
     const char* errormsg [5] = {"Temperature sensor", 
