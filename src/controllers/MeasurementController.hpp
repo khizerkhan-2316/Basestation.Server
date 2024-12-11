@@ -158,79 +158,6 @@ class MeasurementController {
         return resp.done();
     }
 
-  // Handler for the `/api/analysis/:id` route
-  auto getMeasurementResults(
-      const restinio::request_handle_t &req,
-      const restinio::router::route_params_t &params) const {
-    // Create a response object
-    auto resp = init_resp(req->create_response());
-
-    // Get the `id` parameter from the URL
-    std::string id = restinio::cast_to<std::string>(params["id"]);
-
-    // Create a fake Analysis object (replace this with real data fetching)
-    std::string json_body = R"({
-            "id": ")" + id + R"(",
-            "status": "success",
-            "result": "Analysis data for id )" +
-                            id + R"("
-        })";
-
-    // Set the JSON body as the response
-    resp.set_body(json_body);
-
-    // Return the response
-    return resp.done();
-  }
-
-  //   std::vector<Analysis> getAllAnalysis() {
-  //     try {
-  //       return analysisRepo.getAllAnalysis();
-  //     } catch (const std::exception &e) {
-  //       std::cerr << "Error retrieving all analyses: " << e.what() <<
-  //       std::endl; throw;
-  //     }
-  //   }DENNE METODE GIVER FEJL NÅ JEG FORSØGER AT COMPILE -ALI
-
-  // Handler for the `/api/submarine/:submarineId/analysis` route
-
-  auto getSubmarineMeasurements(
-      const restinio::request_handle_t &req,
-      const restinio::router::route_params_t &params) const {
-    // Create a response object
-    auto resp = init_resp(req->create_response());
-
-    // Get the `submarineId` parameter from the URL
-    std::string submarineId =
-        restinio::cast_to<std::string>(params["submarineId"]);
-
-    // Create a fake Analysis list (replace this with real data fetching) SKAL
-    // RETTES!!!!
-    std::string json_body = R"({
-        "submarineId": ")" + submarineId +
-                            R"(",
-        "status": "success",
-        "analysis": [
-            {
-                "analysisId": "1",
-                "type": "structural",
-                "result": "No issues detected."
-            },
-            {
-                "analysisId": "2",
-                "type": "performance",
-                "result": "Optimal performance observed."
-            }
-        ]
-    })";
-
-    // Set the JSON body as the response
-    resp.set_body(json_body);
-    sendMessage("det virker" + std::to_string(1));
-
-    // Return the response
-    return resp.done();
-  }
 
   auto postHardwareTest(const restinio::request_handle_t &req,
                         const restinio::router::route_params_t &params) {
@@ -266,56 +193,7 @@ class MeasurementController {
     return resp.done();
   }
 
-  // Handler for the `/api/submarine/select` route
-  auto handleSubmarineSelection(
-      const restinio::request_handle_t &req,
-      const restinio::router::route_params_t &params) const {
-    // Create a response object
-    auto resp = init_resp(req->create_response());
 
-    try {
-      std::string requestBody = req->body();
-      Submarine submarine;
-      json_dto::from_json(requestBody, submarine);
-
-      // Logic to handle submarine selection (replace with actual logic)
-      bool success = true;  // Simulate successful handling
-      std::string message;
-
-      if (success) {
-        message = "Submarine with ID " + submarine.id +
-                  " has been successfully selected.";
-
-      } else {
-        message =
-            "Failed to handle submarine selection for ID " + submarine.id + ".";
-      }
-
-      // Create a JSON response body
-      //   std::string response_body = R"({
-      //           "status": ")" + (success ? "success" : "failure") +
-      //                               R"(",
-      //           "message": ")" + message +
-      //                               R"("
-      //       })";
-
-      std::string response_body = "test";
-
-      // Set the JSON body as the response
-      resp.set_body(response_body);
-    } catch (const std::exception &e) {
-      // Handle JSON parsing or extraction errors
-      std::string error_message = R"({
-              "status": "failure",
-              "message": "Invalid request data: )" +
-                                  std::string(e.what()) + R"("
-          })";
-      resp.set_body(error_message);
-    }
-
-    // Return the response
-    return resp.done();
-  }
 
  private:
   std::string measurementDepth;
